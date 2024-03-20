@@ -1,4 +1,4 @@
-module github.com/echovl/cardano-go
+module github.com/creamlaflare/cardano-go
 
 go 1.18
 
