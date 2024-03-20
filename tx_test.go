@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/echovl/cardano-go/crypto"
-	"github.com/echovl/cardano-go/internal/cbor"
 )
 
 func TestTxEncoding(t *testing.T) {

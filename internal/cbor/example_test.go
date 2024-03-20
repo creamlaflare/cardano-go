@@ -10,8 +10,6 @@ import (
 	"io"
 	"reflect"
 	"time"
-
-	"github.com/echovl/cardano-go/internal/cbor"
 )
 
 func ExampleMarshal() {

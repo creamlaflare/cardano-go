@@ -2,11 +2,10 @@ package cardano
 
 import (
 	"errors"
-	"math/big"
-
-	"github.com/echovl/cardano-go/internal/bech32"
-	"github.com/echovl/cardano-go/internal/cbor"
+	"github.com/creamlaflare/cardano-go/internal/bech32"
+	"github.com/creamlaflare/cardano-go/internal/cbor"
 	"golang.org/x/crypto/blake2b"
+	"math/big"
 )
 
 type AddressType byte
