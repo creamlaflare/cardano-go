@@ -2,6 +2,8 @@ package cardano
 
 import (
 	"reflect"
+
+	"github.com/creamlaflare/cardano-go/internal/cbor"
 )
 
 // Metadata represents the transaction metadata.

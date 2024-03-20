@@ -2,11 +2,12 @@ package cardano
 
 import (
 	"encoding/hex"
+	"github.com/creamlaflare/cardano-go/internal/cbor"
 	"math/big"
 	"reflect"
 	"testing"
 
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func TestTxEncoding(t *testing.T) {

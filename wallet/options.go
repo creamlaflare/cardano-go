@@ -1,8 +1,8 @@
 package wallet
 
 import (
-	"github.com/echovl/cardano-go"
-	cardanocli "github.com/echovl/cardano-go/cardano-cli"
+	"github.com/creamlaflare/cardano-go"
+	cardanocli "github.com/creamlaflare/cardano-go/cardano-cli"
 )
 
 type Options struct {

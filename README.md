@@ -1,6 +1,6 @@
 # cardano-go
 
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/echovl/cardano-go)](https://pkg.go.dev/github.com/echovl/cardano-go) ![ci](https://github.com/echovl/cardano-go/workflows/test/badge.svg)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/creamlaflare/cardano-go)](https://pkg.go.dev/github.com/creamlaflare/cardano-go) ![ci](https://github.com/creamlaflare/cardano-go/workflows/test/badge.svg)
 
 cardano-go is a library for creating go applicactions that interact with the Cardano Blockchain. [WIP]
 
@@ -9,7 +9,7 @@ Check out our Catalyst proposal: (https://cardano.ideascale.com/c/idea/416383)
 ## Installation
 
 ```
-$ go get github.com/echovl/cardano-go
+$ go get github.com/creamlaflare/cardano-go
 ```
 
 ## Usage
@@ -22,8 +22,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/blockfrost"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/blockfrost"
 )
 
 func main() {
@@ -46,8 +46,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func main() {
@@ -94,7 +94,7 @@ func main() {
 package main
 
 import (
-	"github.com/echovl/cardano-go"
+	"github.com/creamlaflare/cardano-go"
 )
 
 func main() {
@@ -117,8 +117,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/blockfrost"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/blockfrost"
 )
 
 func main() {
@@ -138,7 +138,7 @@ func main() {
 ```go
 package main
 
-import "github.com/echovl/cardano-go"
+import "github.com/creamlaflare/cardano-go"
 
 func main() {
 	txBuilder := cardano.NewTxBuilder(&cardano.ProtocolParams{})
@@ -159,8 +159,8 @@ func main() {
 package main
 
 import (
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func main() {
@@ -186,8 +186,8 @@ func main() {
 package main
 
 import (
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func main() {
@@ -219,8 +219,8 @@ package main
 import (
 	"math/big"
 
-	"github.com/echovl/cardano-go"
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func main() {
@@ -288,7 +288,7 @@ blockfrost_project_id: "project-id"
 ### Installation
 
 ```
-$ git clone github.com/echovl/cardano-go
+$ git clone github.com/creamlaflare/cardano-go
 $ make && sudo make install
 ```
 

@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/echovl/cardano-go/crypto"
+	"github.com/creamlaflare/cardano-go/crypto"
 )
 
 func TestAssetsEncoding(t *testing.T) {
