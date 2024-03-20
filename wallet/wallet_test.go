@@ -69,7 +69,7 @@ func (n *MockNode) ProtocolParams() (*cardano.ProtocolParams, error) {
 }
 
 func (n *MockNode) Network() cardano.Network {
-	return cardano.Testnet
+	return cardano.Preview
 }
 
 func TestWalletBalance(t *testing.T) {

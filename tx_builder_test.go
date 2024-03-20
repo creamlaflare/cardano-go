@@ -401,7 +401,7 @@ func TestAddChangeIfNeeded(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	receiver, err := NewEnterpriseAddress(Testnet, payment)
+	receiver, err := NewEnterpriseAddress(Preview, payment)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -551,7 +551,7 @@ func TestAddChangeIfNeeded(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			changeAddr, err := NewEnterpriseAddress(Testnet, payment)
+			changeAddr, err := NewEnterpriseAddress(Preview, payment)
 			if err != nil {
 				t.Fatal(err)
 			}

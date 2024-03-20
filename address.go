@@ -195,7 +195,7 @@ func (addr *Address) UnmarshalCBOR(data []byte) error {
 func (addr *Address) Bytes() []byte {
 	var networkByte uint8
 	switch addr.Network {
-	case Testnet, Preprod:
+	case Preview, Preprod:
 		networkByte = 0
 	case Mainnet:
 		networkByte = 1
@@ -318,7 +318,7 @@ func Blake224Hash(b []byte) ([]byte, error) {
 
 func getHrp(network Network) string {
 	switch network {
-	case Testnet, Preprod:
+	case Preview, Preprod:
 		return "addr_test"
 	default:
 		return "addr"

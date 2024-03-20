@@ -17,7 +17,7 @@ var deleteWalletCmd = &cobra.Command{
 		useTestnet, _ := cmd.Flags().GetBool("testnet")
 		network := cardano.Mainnet
 		if useTestnet {
-			network = cardano.Testnet
+			network = cardano.Preview
 		}
 
 		node := blockfrost.NewNode(network, cfg.BlockfrostProjectID)

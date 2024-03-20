@@ -12,7 +12,7 @@ import (
 type Network byte
 
 const (
-	Testnet Network = 0
+	Preview Network = 0
 	Mainnet Network = 1
 	Preprod Network = 2
 )
@@ -20,7 +20,7 @@ const (
 // String implements Stringer.
 func (n Network) String() string {
 	switch n {
-	case Testnet:
+	case Preview:
 		return "testnet"
 	case Mainnet:
 		return "mainnet"
@@ -142,10 +142,11 @@ func (v *Value) Sub(rhs *Value) *Value {
 }
 
 // Compares two Values and returns
-//      -1 if v < rhs
-//       0 if v == rhs
-//       1 if v > rhs
-//       2 if not comparable
+//
+//	-1 if v < rhs
+//	 0 if v == rhs
+//	 1 if v > rhs
+//	 2 if not comparable
 func (v *Value) Cmp(rhs *Value) int {
 	lrZero := v.Sub(rhs).IsZero()
 	rlZero := rhs.Sub(v).IsZero()
