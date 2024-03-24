@@ -1,6 +1,7 @@
 package wallet
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/creamlaflare/cardano-go"
@@ -46,6 +47,20 @@ func TestGenerateAddress(t *testing.T) {
 			t.Errorf("invalid paymentAddr1:\ngot: %v\nwant: %v", paymentAddr1, testVector.paymentAddr1)
 		}
 	}
+}
+
+func TestWallet_GetNamiAddress(t *testing.T) {
+	client := NewClient(&Options{})
+	defer client.Close()
+
+	w, err := client.RestoreWallet("test", "", "clock decrease ring dune secret wage brick awesome fine beauty can problem extra park knife elephant amazing audit car key uphold envelope keen reveal")
+	if err != nil {
+		t.Error(err)
+	}
+
+	w.network = cardano.Mainnet
+	addr, err := w.GetNamiAddress()
+	fmt.Println(addr)
 }
 
 type MockNode struct {

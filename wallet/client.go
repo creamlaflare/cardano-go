@@ -2,6 +2,7 @@ package wallet
 
 import (
 	"fmt"
+	"github.com/creamlaflare/cardano-go/crypto"
 
 	"github.com/creamlaflare/cardano-go"
 	"github.com/tyler-smith/go-bip39"
@@ -33,28 +34,58 @@ func (c *Client) Close() {
 func (c *Client) CreateWallet(name, password string) (*Wallet, string, error) {
 	entropy := newEntropy(entropySizeInBits)
 	mnemonic, _ := bip39.NewMnemonic(entropy)
-	wallet := newWallet(name, password, entropy)
+	wallet, err := newWallet(name, password, mnemonic)
+	if err != nil {
+		return nil, "", err
+	}
 	wallet.node = c.opts.Node
 	wallet.network = c.network
-	err := c.opts.DB.Put(wallet)
+	err = c.opts.DB.Put(wallet)
 	if err != nil {
 		return nil, "", err
 	}
 	return wallet, mnemonic, nil
 }
 
-// RestoreWallet restores a Wallet from a mnemonic and password.
 func (c *Client) RestoreWallet(name, password, mnemonic string) (*Wallet, error) {
+	// Convert mnemonic to seed
 	entropy, err := bip39.EntropyFromMnemonic(mnemonic)
 	if err != nil {
 		return nil, err
 	}
-	wallet := newWallet(name, password, entropy)
-	wallet.node = c.opts.Node
-	wallet.network = c.network
-	if err = c.opts.DB.Put(wallet); err != nil {
+
+	// Create root key from seed
+	rootKey := crypto.NewXPrvKeyFromEntropy(entropy, "")
+
+	// Derive the payment key
+	paymentKey, err := deriveKeyByPath(rootKey, PaymentPath)
+	if err != nil {
 		return nil, err
 	}
+
+	// Derive the stake key
+	stakeKey, err := deriveKeyByPath(rootKey, StakePath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Initialize the wallet
+	wallet := &Wallet{
+		ID:       newWalletID(),
+		Name:     name,
+		addrKeys: []crypto.XPrvKey{paymentKey},
+		stakeKey: stakeKey,
+		rootKey:  rootKey,
+		// Ensure that the network and node are set as needed.
+		// wallet.node = c.opts.Node
+		// wallet.network = c.network
+	}
+
+	// Optionally save the wallet if needed
+	// err = c.opts.DB.Put(wallet)
+	// if err != nil {
+	//     return nil, err
+	// }
 
 	return wallet, nil
 }

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-
 	"github.com/creamlaflare/cardano-go"
 	"github.com/creamlaflare/cardano-go/crypto"
+	dpath "github.com/creamlaflare/cardano-go/internal/path"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/tyler-smith/go-bip39"
 )
@@ -21,6 +21,12 @@ const (
 	walleIDAlphabet           = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
 
+var (
+	CardanoStakePath, _ = dpath.Parse("m/1852'/1815'/0'/2/0")
+	PaymentPath         = "m/1852'/1815'/0'/0/0" // Example path, adjust if needed
+	StakePath           = "m/1852'/1815'/0'/2/0" // Cardano CIP1852 stake path
+)
+
 type Wallet struct {
 	ID       string
 	Name     string
@@ -29,6 +35,30 @@ type Wallet struct {
 	rootKey  crypto.XPrvKey
 	node     cardano.Node
 	network  cardano.Network
+}
+
+func (w *Wallet) DerivePaymentAndStakeKeysByPath(
+	path string,
+) (payment crypto.XPrvKey, stake crypto.XPrvKey, err error) {
+
+	rootKey := w.rootKey
+
+	drvPath, err := dpath.Parse(path)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	paymentKey := rootKey
+	for _, p := range drvPath {
+		paymentKey = paymentKey.Derive(p)
+	}
+
+	stakeKey := rootKey
+	for _, p := range CardanoStakePath {
+		stakeKey = stakeKey.Derive(p)
+	}
+
+	return paymentKey, stakeKey, nil
 }
 
 // Transfer sends an amount of lovelace to the receiver address and returns the transaction hash
@@ -192,19 +222,72 @@ func newWalletID() string {
 	return "wallet_" + id
 }
 
-func newWallet(name, password string, entropy []byte) *Wallet {
-	wallet := &Wallet{Name: name, ID: newWalletID()}
+func newWallet(name, password string, mnemonic string) (*Wallet, error) {
+	entropy, err := bip39.NewEntropy(entropySizeInBits)
+	if err != nil {
+		return nil, err
+	}
+
 	rootKey := crypto.NewXPrvKeyFromEntropy(entropy, password)
-	accountKey := rootKey.Derive(purposeIndex).
-		Derive(coinTypeIndex).
-		Derive(accountIndex)
-	chainKey := accountKey.Derive(externalChainIndex)
-	stakeKey := accountKey.Derive(2).Derive(0)
-	addr0Key := chainKey.Derive(0)
-	wallet.rootKey = chainKey
-	wallet.addrKeys = []crypto.XPrvKey{addr0Key}
-	wallet.stakeKey = stakeKey
-	return wallet
+
+	// Derive the payment key
+	paymentKey, err := deriveKeyByPath(rootKey, PaymentPath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Derive the stake key
+	stakeKey, err := deriveKeyByPath(rootKey, StakePath)
+	if err != nil {
+		return nil, err
+	}
+
+	wallet := &Wallet{
+		ID:       newWalletID(),
+		Name:     name,
+		addrKeys: []crypto.XPrvKey{paymentKey}, // Assuming you want to start with one key
+		stakeKey: stakeKey,
+		rootKey:  rootKey, // Storing the root key, adjust based on your need
+	}
+
+	return wallet, nil
+}
+
+func deriveKeyByPath(rootKey crypto.XPrvKey, path string) (crypto.XPrvKey, error) {
+	drvPath, err := dpath.Parse(path)
+	if err != nil {
+		return crypto.XPrvKey{}, err
+	}
+
+	key := rootKey
+	for _, p := range drvPath {
+		key = key.Derive(p)
+	}
+
+	return key, nil
+}
+
+func (w *Wallet) GetNamiAddress() (*cardano.Address, error) {
+	payment, stake, err := w.DerivePaymentAndStakeKeysByPath("m/1852'/1815'/0'/0/0")
+	if err != nil {
+		return nil, err
+	}
+	paymentCreds, err := cardano.NewKeyCredential(payment.XPubKey().PubKey())
+	if err != nil {
+		return nil, err
+	}
+
+	stakeCreds, err := cardano.NewKeyCredential(stake.XPubKey().PubKey())
+	if err != nil {
+		return nil, err
+	}
+
+	addr, err := cardano.NewBaseAddress(w.network, paymentCreds, stakeCreds)
+	if err != nil {
+		return nil, err
+	}
+
+	return &addr, nil
 }
 
 type walletDump struct {
