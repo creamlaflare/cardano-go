@@ -76,16 +76,14 @@ func (c *Client) RestoreWallet(name, password, mnemonic string) (*Wallet, error)
 		addrKeys: []crypto.XPrvKey{paymentKey},
 		stakeKey: stakeKey,
 		rootKey:  rootKey,
-		// Ensure that the network and node are set as needed.
-		// wallet.node = c.opts.Node
-		// wallet.network = c.network
+		node:     c.opts.Node,
+		network:  c.network,
 	}
 
-	// Optionally save the wallet if needed
-	// err = c.opts.DB.Put(wallet)
-	// if err != nil {
-	//     return nil, err
-	// }
+	err = c.opts.DB.Put(wallet)
+	if err != nil {
+		return nil, err
+	}
 
 	return wallet, nil
 }
