@@ -28,13 +28,14 @@ var (
 )
 
 type Wallet struct {
-	ID       string
-	Name     string
-	addrKeys []crypto.XPrvKey
-	stakeKey crypto.XPrvKey
-	rootKey  crypto.XPrvKey
-	node     cardano.Node
-	network  cardano.Network
+	ID          string
+	Name        string
+	addrKeys    []crypto.XPrvKey
+	stakeKey    crypto.XPrvKey
+	rootKey     crypto.XPrvKey
+	node        cardano.Node
+	network     cardano.Network
+	namiAddress *cardano.Address
 }
 
 func (w *Wallet) DerivePaymentAndStakeKeysByPath(
@@ -198,7 +199,7 @@ func (w *Wallet) AddBaseAddress() (cardano.Address, error) {
 
 // Addresses returns all wallet's addresss.
 func (w *Wallet) Addresses() ([]cardano.Address, error) {
-	addresses := make([]cardano.Address, len(w.addrKeys))
+	addresses := make([]cardano.Address, len(w.addrKeys)+1)
 	for i, key := range w.addrKeys {
 		payment, err := cardano.NewKeyCredential(key.PubKey())
 		if err != nil {
@@ -210,6 +211,7 @@ func (w *Wallet) Addresses() ([]cardano.Address, error) {
 		}
 		addresses[i] = enterpriseAddr
 	}
+	addresses[len(addresses)-1] = *w.namiAddress
 	return addresses, nil
 }
 
@@ -286,6 +288,8 @@ func (w *Wallet) GetNamiAddress() (*cardano.Address, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	w.namiAddress = &addr
 
 	return &addr, nil
 }
