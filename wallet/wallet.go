@@ -211,7 +211,7 @@ func (w *Wallet) Addresses() ([]cardano.Address, error) {
 		}
 		addresses[i] = enterpriseAddr
 	}
-	addresses[len(addresses)-1] = *w.namiAddress
+	addresses[len(w.addrKeys)-1] = *w.namiAddress
 	return addresses, nil
 }
 
