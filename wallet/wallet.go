@@ -213,6 +213,12 @@ func (w *Wallet) Addresses() ([]cardano.Address, error) {
 	}
 	if w.namiAddress != nil {
 		addresses = append(addresses, *w.namiAddress)
+	} else {
+		addr, err := w.GetNamiAddress()
+		if err != nil {
+			return nil, err
+		}
+		addresses = append(addresses, *addr)
 	}
 	return addresses, nil
 }
