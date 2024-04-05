@@ -8,6 +8,7 @@ import (
 	"github.com/creamlaflare/cardano-go/crypto"
 	dpath "github.com/creamlaflare/cardano-go/internal/path"
 	gonanoid "github.com/matoous/go-nanoid/v2"
+	"github.com/tyler-smith/go-bip39"
 )
 
 const (
